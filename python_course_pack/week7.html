@@ -1,0 +1,65 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Week 7 — Classes and Objects</title><style>
+:root{
+  --bg:#f7f8fc; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
+  --accent:#4f46e5; --accent2:#06b6d4; --line:#e5e7eb; --ok:#059669;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
+header{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;padding:28px 20px}
+header h1{margin:0 0 8px 0;font-size:34px}
+header p{margin:0;max-width:820px}
+.container{max-width:1000px;margin:20px auto;padding:0 16px 40px}
+nav.top{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0}
+nav.top a{background:rgba(255,255,255,.18);color:white;text-decoration:none;padding:8px 12px;border-radius:999px;font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:16px 0;box-shadow:0 6px 18px rgba(0,0,0,.04)}
+h2{margin:0 0 10px;color:#111827}
+h3{margin:18px 0 8px}
+ul{padding-left:22px}
+pre{background:#0f172a;color:#e5e7eb;padding:14px;border-radius:12px;overflow:auto}
+code{font-family:Consolas,monospace}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.pill{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:999px;padding:4px 10px;font-size:12px;margin:0 6px 6px 0}
+.small{color:var(--muted);font-size:14px}
+details{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fafafa;margin:10px 0}
+summary{cursor:pointer;font-weight:bold}
+.lesson-nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.lesson-nav a{color:var(--accent);text-decoration:none;font-weight:bold}
+table{width:100%;border-collapse:collapse}
+th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
+th{background:#f3f4f6}
+.callout{border-left:4px solid var(--accent);padding:10px 14px;background:#eef2ff;border-radius:10px}
+.badge{background:#ecfeff;color:#155e75;border-radius:999px;padding:4px 10px;font-size:12px}
+</style></head>
+<body>
+<header><div class="container">
+<h1>Week 7 — Classes and Objects</h1>
+<p>Copy the code into VS Code, run it, then complete the quiz and challenge.</p>
+<nav class="top"><a href="index.html">Home</a> <a href="week0.html">Week 0</a> <a href="week1.html">Week 1</a> <a href="week2.html">Week 2</a> <a href="week3.html">Week 3</a> <a href="week4.html">Week 4</a> <a href="week5.html">Week 5</a> <a href="week6.html">Week 6</a></nav>
+</div></header>
+<div class="container">
+<div class="card"><span class="badge">Lesson</span>
+<h2>Goals</h2><ul><li>Understand blueprint vs object</li><li>Create a class</li><li>Use methods</li></ul></div>
+<div class="card"><h2>How to explain it</h2><p>A class is a blueprint. An object is one thing built from that blueprint. Methods are actions the object can do.</p>
+<div class="callout"><strong>Teacher move:</strong> Ask, “What do you think this code will do?” before running it.</div></div>
+<div class="card"><h2>Guided example</h2><pre><code>class Pet:
+    def __init__(self, name, animal_type):
+        self.name = name
+        self.animal_type = animal_type
+
+    def introduce(self):
+        print(&quot;Hi, I am&quot;, self.name, &quot;and I am a&quot;, self.animal_type)
+
+my_pet = Pet(&quot;Luna&quot;, &quot;cat&quot;)
+my_pet.introduce()</code></pre></div>
+<div class="card"><h2>Try it</h2><p>Make a Dog class with a bark() method.</p></div>
+<div class="card"><h2>Quick quiz</h2>
+<details><summary>What is a class?</summary><p>A blueprint.</p></details><details><summary>What is an object?</summary><p>An instance created from the class.</p></details><details><summary>What is a method?</summary><p>A function inside a class.</p></details>
+</div>
+<div class="card"><h2>Small assignment</h2><p>Create a pet simulator with at least 2 methods.</p></div>
+<div class="card lesson-nav">
+  <a href="week6.html">← Previous</a>
+  <a href="week8.html">Next →</a>
+</div>
+</div></body></html>
