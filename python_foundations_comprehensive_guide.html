@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Foundations Comprehensive Teaching Guide</title>
+  <style>
+    :root {
+      --bg: #f2e8d5;
+      --panel: #fffaf1;
+      --ink: #1f2b33;
+      --muted: #5d6a70;
+      --line: #d9c6a1;
+      --accent: #c55b3c;
+      --accent-soft: #f3d7cb;
+      --support: #2f7b67;
+      --support-soft: #d8eee7;
+      --deep: #173a52;
+      --gold: #b88c2d;
+      --shadow: 0 18px 40px rgba(31, 43, 51, 0.12);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Segoe UI", Candara, "Trebuchet MS", Verdana, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(197, 91, 60, 0.14), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(47, 123, 103, 0.14), transparent 28%),
+        linear-gradient(135deg, #efe2ca 0%, var(--bg) 55%, #dde9e2 100%);
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 24px auto 40px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .hero, .panel, .lesson {
+      background: rgba(255, 250, 241, 0.93);
+      border: 1px solid rgba(23, 58, 82, 0.12);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      overflow: hidden;
+    }
+
+    .hero-top {
+      padding: 38px;
+      background: linear-gradient(140deg, rgba(23, 58, 82, 0.96) 0%, rgba(47, 123, 103, 0.9) 55%, rgba(197, 91, 60, 0.88) 100%);
+      color: white;
+    }
+
+    .hero-top h1, h2, h3 {
+      font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    }
+
+    .hero-top h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 0.98;
+      max-width: 12ch;
+    }
+
+    .hero-top p { 
+      max-width: 80ch; 
+      line-height: 1.72; 
+      margin-bottom: 0; 
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      padding: 24px 34px 30px;
+    }
+
+    .tip, .meta-card, .spark-card, .roadmap-item, .ref-card, .error-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      line-height: 1.62;
+    }
+
+    .tip strong, .meta-card strong, .spark-card strong, .roadmap-item strong, .ref-card strong, .error-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--deep);
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .progress-bar {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #eadfc8;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--support));
+      transition: width 180ms ease;
+    }
+
+    .chip-row, .roadmap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(23, 58, 82, 0.08);
+      color: var(--deep);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .roadmap {
+      margin-top: 14px;
+    }
+
+    .roadmap-item {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+
+    .lesson {
+      overflow: hidden;
+    }
+
+    .lesson summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-weight: 700;
+      color: var(--deep);
+    }
+
+    .lesson summary::-webkit-details-marker { display: none; }
+
+    .lesson-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+
+    .lesson-body {
+      padding: 0 24px 24px;
+      border-top: 1px solid rgba(23, 58, 82, 0.1);
+    }
+
+    .lesson-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 18px 0;
+      flex-wrap: wrap;
+    }
+
+    .complete-toggle {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--support-soft);
+      color: #1e5b4d;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tag {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.68;
+      max-width: 75ch;
+    }
+
+    .two-col, .teacher-grid, .ref-grid, .error-grid, .quiz-bank-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .teacher-grid, .ref-grid, .error-grid {
+      margin-top: 16px;
+    }
+
+    .card {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    .card p, .card li, .lesson-body p, .lesson-body li { line-height: 1.72; }
+    .card ul, .lesson-body ul, .lesson-body ol { padding-left: 20px; }
+    .card li + li, .lesson-body li + li { margin-top: 8px; }
+
+    .mini {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .mini summary {
+      padding: 14px 16px;
+      font-weight: 700;
+      color: var(--deep);
+    }
+
+    .mini-body {
+      padding: 0 16px 16px;
+    }
+
+    pre {
+      margin: 0;
+      padding: 14px;
+      overflow-x: auto;
+      border-radius: 14px;
+      background: #14263a;
+      color: #f8f2e8;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      font-family: Consolas, "Courier New", monospace;
+      white-space: pre-wrap;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font: inherit;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    .answer {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(23, 58, 82, 0.06);
+      line-height: 1.66;
+    }
+
+    .notes textarea {
+      width: 100%;
+      min-height: 180px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      font: inherit;
+      resize: vertical;
+      background: white;
+      color: var(--ink);
+    }
+
+    .bridge {
+      margin: 14px 0 0;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--accent-soft);
+      color: #7b341f;
+      line-height: 1.65;
+    }
+
+    .spotlight-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 248, 237, 0.96) 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      color: var(--deep);
+    }
+
+    .subtle {
+      color: var(--muted);
+    }
+
+    .list-tight li + li {
+      margin-top: 6px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .meta, .two-col, .spotlight-bar, .quiz-bank-grid, .teacher-grid, .ref-grid, .error-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+      .page {
+        width: 100%;
+        margin: 0;
+      }
+      .hero, .panel, .lesson {
+        box-shadow: none;
+      }
+      .button, #resetProgress {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-top">
+        <p style="margin:0 0 10px; letter-spacing:0.14em; text-transform:uppercase; font-weight:700;">Comprehensive teaching guide</p>
+        <h1>Python foundations for high school beginners.</h1>
+        <p>This revised guide turns a basic outline into a fuller teaching sequence. It is written for students who are new to programming and for teachers, tutors, or parents who want a clearer structure for explaining each idea. The guide now moves across 15 lessons and strengthens both the explanations and the practice tasks.</p>
+      </div>
+      <div class="hero-grid">
+        <div class="tip"><strong>What's new in this edition</strong>Every lesson now has deeper explanations, vocabulary, common mistakes, quick checks, and guided assignments rather than short notes only.</div>
+        <div class="tip"><strong>Missing concepts added</strong>Comments, indentation, f-strings, variable scope, validation with <code>try</code>/<code>except</code>, and testing habits have been added explicitly.</div>
+        <div class="tip"><strong>How students should use it</strong>Read, predict the output, type the example yourself, answer the checks, then complete the assignment before moving on.</div>
+        <div class="tip"><strong>What success looks like</strong>The goal is not memorizing every line. The goal is being able to explain, modify, test, and debug the code with growing confidence.</div>
+      </div>
+    </section>
+
+    <section class="meta">
+      <div class="panel" style="padding:20px;">
+        <div class="progress-row">
+          <strong id="progressText">0 of 15 steps completed</strong>
+          <button id="resetProgress" class="button secondary" type="button">Reset progress</button>
+        </div>
+        <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+        <div class="chip-row">
+          <span class="chip">15 lessons</span>
+          <span class="chip">Expanded explanations</span>
+          <span class="chip">Added missing concepts</span>
+          <span class="chip">Quick checks</span>
+          <span class="chip">Sample solutions</span>
+          <span class="chip">Offline HTML</span>
+        </div>
+      </div>
+      <div class="panel" style="padding:20px;">
+        <div class="meta-card"><strong>Suggested pacing</strong>Plan for about 45 to 75 minutes per lesson. Slower is fine when the student is tracing code carefully and typing examples themselves.</div>
+        <div class="meta-card" style="margin-top:12px;"><strong>Recommended tools</strong>Thonny, IDLE, VS Code, or an online Python runner are all enough for this guide. The key requirement is that the student can run small Python programs easily.</div>
+        <div class="meta-card" style="margin-top:12px;"><strong>Learning cycle</strong>Explain the idea, predict the output, run the code, trace the variables, then modify the program to prove understanding.</div>
+      </div>
+    </section>
+
+    <section class="spotlight-bar">
+      <article class="spark-card"><strong>Lesson sequence improved</strong>The guide now begins with comments and indentation, then moves through variables, input, decisions, repetition, functions, data structures, debugging, files, and a stronger capstone.</article>
+      <article class="spark-card"><strong>Better teaching support</strong>Each lesson now includes vocabulary, common mistakes, and a clearer definition of what the student should be able to do before moving on.</article>
+      <article class="spark-card"><strong>More realistic programming habits</strong>Validation, error handling, testing, and tracing are included so students learn how real code behaves outside perfect textbook examples.</article>
+      <article class="spark-card"><strong>Capstone upgraded</strong>The final project now integrates validation, functions, lists, dictionaries, and optional file saving for a more complete beginner project.</article>
+    </section>
+
+    <section class="panel" style="padding:20px;">
+      <h2>Teacher or tutor moves that help most</h2>
+      <p class="subtle">These habits matter more than giving longer lectures. They help a student become an active reasoner rather than a passive copier.</p>
+      <div class="teacher-grid">
+        <article class="spark-card"><strong>Predict before run</strong>Before the student presses Run, ask them to say what the program will print or do. Prediction builds reasoning instead of copying.</article><article class="spark-card"><strong>Trace values out loud</strong>When code becomes confusing, slow down and track the value of each important variable line by line.</article><article class="spark-card"><strong>Change one thing at a time</strong>When debugging, make one small change, test again, and observe what changed. This prevents confusion.</article><article class="spark-card"><strong>Require one extra challenge</strong>After every lesson, ask the student to modify the example slightly so they prove they understand the idea and are not just copying.</article>
+      </div>
+    </section>
+
+    <section class="panel" style="padding:20px;">
+      <h2>Lesson roadmap</h2>
+      <p class="subtle">Students do not need to master everything at once. The point is to build one layer at a time and keep pulling earlier ideas into later lessons.</p>
+      <div class="roadmap">
+        <span class="roadmap-item">1. How programs work: output, comments, and indentation</span><span class="roadmap-item">2. Variables, values, data types, and arithmetic</span><span class="roadmap-item">3. Input, type conversion, and readable output with f-strings</span><span class="roadmap-item">4. Conditionals and boolean logic</span><span class="roadmap-item">5. Loops, repetition, counters, and accumulators</span><span class="roadmap-item">6. Functions, parameters, return values, and scope</span><span class="roadmap-item">7. Strings and text processing</span><span class="roadmap-item">8. Lists and basic list algorithms</span><span class="roadmap-item">9. Dictionaries and structured records</span><span class="roadmap-item">10. Input validation and error handling with try/except</span><span class="roadmap-item">11. Debugging, testing, and tracing</span><span class="roadmap-item">12. Modules, imports, and helpful library tools</span><span class="roadmap-item">13. Files and persistent data</span><span class="roadmap-item">14. Problem decomposition, pseudocode, and planning</span><span class="roadmap-item">15. Capstone project: personal study planner</span>
+      </div>
+    </section>
+
+    
+    <details class="lesson" open>
+      <summary>
+        <span class="lesson-title"><span class="step-number">1</span><span>How programs work: output, comments, and indentation</span></span>
+        <span>Getting started</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: what a program is, how Python runs top to bottom, how <code>print()</code> shows output, and why spacing matters in Python.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-1"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>A program is a set of instructions that Python follows in order. That sounds simple, but it is the first big programming idea: the computer does not guess what you meant. It follows the instructions you actually wrote. Because of that, programmers must learn to be clear, precise, and patient with details.</p><p>The function <code>print()</code> is one of the most important tools for beginners because it lets you see what your program is doing. When a student uses <code>print()</code>, the screen becomes a window into the program. Later, the same tool will also help with debugging, testing, and checking variable values.</p><p>Comments begin with <code>#</code>. Python ignores them, which makes comments useful for explaining your thinking to yourself or to another reader. Good comments explain purpose, not the obvious. A comment such as <code># ask for the student's score</code> can be helpful. A comment such as <code># print this</code> beside <code>print(...)</code> is usually unnecessary.</p><p>Python is also famous for caring about indentation. In many languages, spaces are mostly about appearance. In Python, spaces can change the meaning of the code because they show which lines belong together. You will see this clearly when you start writing <code>if</code> statements, loops, and functions. That is why it is worth learning early that neat spacing is not optional style in Python; it is part of the syntax.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain what a program is in plain language.</li><li>You can use <code>print()</code> to display text.</li><li>You can write and recognize a Python comment.</li><li>You understand that indentation matters in Python.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Program:</strong> a sequence of instructions a computer can follow.</li><li><strong>Interpreter:</strong> the software that reads and runs Python code.</li><li><strong>Output:</strong> information the program displays.</li><li><strong>Comment:</strong> a note for humans that Python ignores.</li><li><strong>Syntax:</strong> the rules for writing code correctly.</li><li><strong>Indentation:</strong> spaces at the start of a line that show structure in Python.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Thinking the computer will "figure out" what you meant even when the code is incomplete or misspelled.</li><li>Forgetting quotation marks around text.</li><li>Using tabs and spaces inconsistently.</li><li>Misspelling <code>print</code> or changing its capitalization.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code># This program prints three lines of output.
+print(&quot;Hello, world!&quot;)
+print(&quot;Today I will learn Python.&quot;)
+print(&quot;Programs follow instructions one step at a time.&quot;)</code></pre>
+            <p>The comment is for the human reader. Python skips it. The three <code>print()</code> lines create the visible output.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>Which line below does <em>not</em> produce output: a comment line or a <code>print()</code> line?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>A comment line does not produce output. Python ignores comments.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>Why is indentation important in Python even though spaces often look like a style choice?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because indentation shows structure. In Python, spaces can change which lines belong inside an <code>if</code>, loop, or function.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a personal introduction script.</strong></p>
+            <ol>
+              <li>Write two comments at the top that explain what your program is for.</li><li>Use at least four <code>print()</code> lines to introduce yourself.</li><li>Print your name, favorite subject, and one goal for learning Python.</li><li>Make the output look neat and readable.</li><li>Stretch challenge: add a blank line between sections using <code>print()</code>.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Read your program out loud. If the output sounds like a short introduction and the comments explain the purpose, you are doing it right.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code># This program introduces the student.
+# It practices print statements and comments.
+
+print(&quot;Hello!&quot;)
+print(&quot;My name is Jordan.&quot;)
+print(&quot;My favorite subject is science.&quot;)
+print(&quot;I want to learn Python so I can build useful programs.&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: instead of printing fixed messages only, you will store information in variables and use it in calculations.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">2</span><span>Variables, values, data types, and arithmetic</span></span>
+        <span>Core ideas</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: storing information in variables, understanding common data types, and performing calculations with expressions.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-2"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>A variable is a name that refers to a value. A useful beginner model is to imagine a labeled box. The label is the variable name, and the box holds the current value. When Python sees <code>score = 92</code>, it stores the value 92 and associates it with the name <code>score</code>.</p><p>The equals sign in programming is not the same as the equals sign in algebra. In Python, <code>=</code> means assignment: store the value on the right in the name on the left. That is why <code>score = score + 4</code> makes sense in programming. Python first looks up the old value of <code>score</code>, adds 4, and then stores the new value back into <code>score</code>.</p><p>Python keeps track of what kind of value something is. Common beginner data types are <code>str</code> for text, <code>int</code> for whole numbers, <code>float</code> for decimal numbers, and <code>bool</code> for <code>True</code> or <code>False</code>. Types matter because different operations make sense for different data. Text can be combined and cleaned. Numbers can be added, multiplied, and compared.</p><p>Expressions are combinations of values and operators that Python can evaluate. Arithmetic operators include <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>//</code>, <code>%</code>, and <code>**</code>. Parentheses are important because they make your intention clearer and control the order of operations. Strong beginners get into the habit of storing important intermediate results in variables instead of packing everything into one long line.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain what a variable is.</li><li>You can store text, whole numbers, decimals, and booleans.</li><li>You can build arithmetic expressions and explain the result.</li><li>You can trace how a variable changes from one line to the next.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Variable:</strong> a name that stores or refers to a value.</li><li><strong>Value:</strong> the actual data, such as <code>15</code> or <code>"Maya"</code>.</li><li><strong>Assignment:</strong> storing a value in a variable with <code>=</code>.</li><li><strong>Expression:</strong> code that Python can evaluate to produce a value.</li><li><strong>Data type:</strong> the category of a value, such as string or integer.</li><li><strong>Boolean:</strong> a value that is either <code>True</code> or <code>False</code>.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Using spaces in a variable name such as <code>test score</code> instead of <code>test_score</code>.</li><li>Putting quotation marks around numbers when you really want math.</li><li>Mixing up <code>=</code> and <code>==</code>.</li><li>Trying to do too much in one long expression without checking intermediate results.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>name = &quot;Maya&quot;
+age = 15
+notebook_price = 3
+notebooks = 4
+
+total = notebook_price * notebooks
+print(name)
+print(age)
+print(&quot;Total cost:&quot;, total)
+print(&quot;Age next year:&quot;, age + 1)</code></pre>
+            <p>This example stores both text and numbers. The variable <code>total</code> is calculated from earlier values, which makes the program easier to read and change.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>What will this print?<br><pre><code>score = 6
+score = score + 4
+print(score)</code></pre></p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It prints <strong>10</strong>. Python looks up the old value of <code>score</code>, adds 4, and stores the new result back into <code>score</code>.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>What does the operator <code>%</code> do?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It finds the remainder. For example, <code>10 % 3</code> is 1 because 3 goes into 10 three times with 1 left over.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a school supply budget checker.</strong></p>
+            <ol>
+              <li>Create variables for a budget, notebook price, pen price, and quantity of each item.</li><li>Calculate the total cost using arithmetic.</li><li>Calculate how much money is left after the purchase.</li><li>Print the total cost and money left in clear sentences.</li><li>Stretch challenge: add a discount percentage and apply it.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Use one variable for each important number. If your answer looks wrong, print the intermediate values.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>budget = 25
+notebook_price = 3
+pen_price = 2
+notebooks = 4
+pens = 3
+
+total_cost = notebook_price * notebooks + pen_price * pens
+money_left = budget - total_cost
+
+print(&quot;Total cost:&quot;, total_cost)
+print(&quot;Money left:&quot;, money_left)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will start collecting information from the user, which means your program will no longer be limited to fixed values.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">3</span><span>Input, type conversion, and readable output with f-strings</span></span>
+        <span>User interaction</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: using <code>input()</code>, converting text into numbers, and formatting output so it is easy to read.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-3"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>The function <code>input()</code> makes a program interactive. When Python reaches an input line, it pauses and waits for the user to type something. This changes the feel of a program completely. Instead of always using the same built-in values, the program can respond to new information each time it runs.</p><p>A key detail is that <code>input()</code> returns text. Even if the user types <code>16</code>, Python receives it as the string <code>"16"</code>. This is why type conversion is so important. If you want to do math, you usually need to convert the input with <code>int()</code> or <code>float()</code> first.</p><p>Programs also need readable output. Beginners often use many commas inside <code>print()</code>, which works, but f-strings are cleaner and easier to read. An f-string begins with <code>f</code> before the opening quotation mark. Inside it, you can place variable names in curly braces, such as <code>f"Hello, {name}"</code>. This is one of the most useful everyday Python skills because it makes messages look professional without much effort.</p><p>A strong habit here is to ask two questions every time you take input: what type does the user give me first, and what type does my program need next? If those two answers are different, conversion is probably required.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You understand that <code>input()</code> returns a string.</li><li>You can choose when to use <code>int()</code> and <code>float()</code>.</li><li>You can create clear prompts for the user.</li><li>You can print polished output with f-strings.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Input:</strong> information the program receives from the user.</li><li><strong>Prompt:</strong> the message shown inside <code>input()</code>.</li><li><strong>Type conversion:</strong> changing a value from one type to another.</li><li><strong>f-string:</strong> a string that can insert variable values directly.</li><li><strong><code>int()</code>:</strong> converts a value to a whole number.</li><li><strong><code>float()</code>:</strong> converts a value to a decimal number.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Forgetting that <code>input()</code> gives text first.</li><li>Trying to add a number to a string without conversion.</li><li>Using <code>int()</code> when the user might enter a decimal.</li><li>Writing an f-string without the starting <code>f</code>.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>name = input(&quot;What is your name? &quot;)
+grade = int(input(&quot;What grade are you in? &quot;))
+minutes = float(input(&quot;How many minutes did you study today? &quot;))
+
+hours = minutes / 60
+print(f&quot;Hello, {name}!&quot;)
+print(f&quot;You are in grade {grade}.&quot;)
+print(f&quot;That is about {hours:.1f} hours of study.&quot;)</code></pre>
+            <p>The user's name stays as text, but grade and minutes are converted into number types. The final line uses <code>{hours:.1f}</code> to show one digit after the decimal point.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>Why is <code>int(input("Age: "))</code> often necessary?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because <code>input()</code> returns text. If you need to do math or make numeric comparisons, you usually need to convert that text into a number first.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>What is the difference between <code>"score"</code> and <code>score</code>?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden><code>"score"</code> is the text made of the letters s-c-o-r-e. <code>score</code> without quotation marks is a variable name.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a weekly study summary.</strong></p>
+            <ol>
+              <li>Ask for the student's name.</li><li>Ask how many study sessions they completed this week.</li><li>Ask for the average length of each session in minutes.</li><li>Calculate total study minutes and total study hours.</li><li>Print a clean summary using at least one f-string.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Use <code>int()</code> for the number of sessions. Use <code>float()</code> if you want to allow decimal minute values such as 45.5.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>name = input(&quot;What is your name? &quot;)
+sessions = int(input(&quot;How many sessions this week? &quot;))
+minutes = float(input(&quot;Average minutes per session? &quot;))
+
+total_minutes = sessions * minutes
+total_hours = total_minutes / 60
+
+print(f&quot;{name} studied for {total_minutes} minutes this week.&quot;)
+print(f&quot;That is about {total_hours:.2f} hours.&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: your program will start making decisions based on the values it receives.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">4</span><span>Conditionals and boolean logic</span></span>
+        <span>Decision making</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: using <code>if</code>, <code>elif</code>, and <code>else</code> to choose among different paths.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-4"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>Conditionals allow a program to behave differently in different situations. That is one of the first moments when code starts to feel smart. Instead of always printing the same message, the program can inspect a value and choose what should happen next.</p><p>The decision is based on a boolean expression, which is an expression that becomes either <code>True</code> or <code>False</code>. Comparison operators such as <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>==</code>, and <code>!=</code> let Python ask questions about values. One of the most common beginner errors is confusing <code>=</code> and <code>==</code>. The first stores a value. The second compares two values.</p><p>In a chain of <code>if</code>, <code>elif</code>, and <code>else</code>, Python checks the conditions from top to bottom. As soon as one branch is true, Python runs that branch and skips the rest of the chain. Because of that, order matters. More specific conditions usually need to come before more general ones.</p><p>Logical operators make conditions stronger and more realistic. <code>and</code> means both conditions must be true. <code>or</code> means at least one condition must be true. <code>not</code> reverses a condition. The deeper skill in this lesson is not just writing a condition, but testing it with several cases and explaining why the program chose a particular branch.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain what a boolean expression is.</li><li>You can write comparisons such as <code>score &gt;= 70</code>.</li><li>You can use <code>if</code>, <code>elif</code>, and <code>else</code> together.</li><li>You can test different inputs and predict which branch will run.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Conditional:</strong> code that chooses among different paths.</li><li><strong>Boolean expression:</strong> an expression that is either true or false.</li><li><strong>Comparison operator:</strong> a symbol used to compare values.</li><li><strong>Branch:</strong> one path the program can take in a conditional.</li><li><strong><code>and</code>:</strong> both conditions must be true.</li><li><strong><code>or</code>:</strong> at least one condition must be true.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Using <code>=</code> when you meant <code>==</code>.</li><li>Putting a broad condition before a more specific one.</li><li>Forgetting the colon at the end of an <code>if</code> line.</li><li>Writing separate <code>if</code> statements when you really want one chain of <code>if</code>/<code>elif</code>/<code>else</code>.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>score = int(input(&quot;Enter your score: &quot;))
+
+if score &gt;= 90:
+    print(&quot;Excellent&quot;)
+elif score &gt;= 70:
+    print(&quot;Passing&quot;)
+else:
+    print(&quot;Needs review&quot;)
+
+minutes = int(input(&quot;How many minutes do you have? &quot;))
+confidence = int(input(&quot;How confident are you from 1 to 10? &quot;))
+
+if minutes &gt;= 45 and confidence &lt;= 4:
+    print(&quot;Do a full review session.&quot;)
+else:
+    print(&quot;Do a shorter practice session.&quot;)</code></pre>
+            <p>The first example chooses one of three messages. The second uses <code>and</code> to combine two conditions into one decision rule.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>True or false: in one <code>if</code>/<code>elif</code>/<code>else</code> chain, Python runs every branch whose condition is true.</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>False. Python runs only the first branch whose condition is true, then skips the rest of that chain.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>Why should more specific conditions usually appear before more general ones?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because Python stops at the first true branch. If a broad rule comes first, it may block the more specific rule from ever running.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a study mode recommender.</strong></p>
+            <ol>
+              <li>Ask how many minutes the user has available to study.</li><li>Ask for a confidence rating from 1 to 10.</li><li>Use at least three branches to recommend different study plans.</li><li>Use at least one condition with <code>and</code> or <code>or</code>.</li><li>Print the final recommendation in a full sentence.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Start with your most specific rule. For example, low confidence and lots of available time deserves a different response from just having medium time.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>minutes = int(input(&quot;How many minutes do you have? &quot;))
+confidence = int(input(&quot;How confident are you from 1 to 10? &quot;))
+
+if minutes &gt;= 45 and confidence &lt;= 4:
+    recommendation = &quot;Do a full review with notes and practice problems.&quot;
+elif minutes &gt;= 20:
+    recommendation = &quot;Do a focused set of practice questions.&quot;
+else:
+    recommendation = &quot;Use flashcards for a short review.&quot;
+
+print(f&quot;Recommended plan: {recommendation}&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: instead of choosing one path once, you will repeat actions with loops.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">5</span><span>Loops, repetition, counters, and accumulators</span></span>
+        <span>Repetition</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: repeating code with <code>for</code> and <code>while</code> loops, and tracking values that change over time.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-5"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>Loops solve one of the most common problems in programming: repeating work without copying the same lines again and again. If a student needs to enter ten scores, writing the same input line ten times would be slow to build and annoying to change. A loop allows the program to repeat a block of code on purpose.</p><p>A <code>for</code> loop is usually the best choice when you know how many repetitions you need. It often works with <code>range()</code>, which produces a sequence of numbers. A <code>while</code> loop is different: it keeps going as long as a condition remains true. That makes it useful when you do not know exactly how many times the loop should run in advance.</p><p>Two important loop patterns are counters and accumulators. A counter tracks how many times something has happened. An accumulator stores a running total. For example, if you collect five quiz scores, you might use a loop to ask for each score and an accumulator to keep adding them together.</p><p>The biggest dangers with loops are off-by-one errors and infinite loops. <code>range(1, 4)</code> produces 1, 2, and 3, not 1 through 4. A <code>while</code> loop can run forever if nothing inside the loop changes the condition. That is why tracing matters so much: after each pass, ask what changed and whether the loop should continue.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain the difference between <code>for</code> and <code>while</code>.</li><li>You can use an accumulator to total values.</li><li>You can trace what changes during each iteration.</li><li>You can combine loops with user input and conditionals.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Loop:</strong> code that repeats.</li><li><strong><code>for</code> loop:</strong> a loop often used when the number of repetitions is known.</li><li><strong><code>while</code> loop:</strong> a loop that continues while a condition is true.</li><li><strong>Counter:</strong> a variable that counts repetitions or events.</li><li><strong>Accumulator:</strong> a variable that keeps a running total.</li><li><strong>Iteration:</strong> one pass through a loop.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Forgetting that the stop value in <code>range()</code> is not included.</li><li>Changing the wrong variable inside a loop.</li><li>Creating a <code>while</code> loop whose condition never becomes false.</li><li>Losing track of indentation so lines run outside the loop by accident.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>for round_number in range(1, 6):
+    print(&quot;Practice round&quot;, round_number)
+
+days = int(input(&quot;How many days did you read this week? &quot;))
+total_minutes = 0
+
+for day in range(1, days + 1):
+    minutes = int(input(f&quot;Minutes on day {day}: &quot;))
+    total_minutes = total_minutes + minutes
+
+print(&quot;Total reading minutes:&quot;, total_minutes)</code></pre>
+            <p>The first loop repeats a fixed number of times. The second loop uses an accumulator to total values collected from the user.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>What values does <code>range(1, 4)</code> produce?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It produces 1, 2, and 3. The stop value 4 is not included.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>Why might a <code>while</code> loop run forever?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because the condition never becomes false. Usually that means the loop is not updating something it should update.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a weekly reading log.</strong></p>
+            <ol>
+              <li>Ask how many days of reading data the user wants to enter.</li><li>Use a loop to ask for reading minutes for each day.</li><li>Use an accumulator to store the total minutes.</li><li>After the loop, calculate the average minutes per day.</li><li>Use a conditional to label the reading habit as strong, improving, or needs work.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>If your average looks wrong, print both <code>total_minutes</code> and <code>days</code> before the calculation to check whether the loop collected the correct numbers.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>days = int(input(&quot;How many days did you read this week? &quot;))
+total_minutes = 0
+
+for day in range(1, days + 1):
+    minutes = int(input(f&quot;Minutes on day {day}: &quot;))
+    total_minutes = total_minutes + minutes
+
+average = total_minutes / days
+print(&quot;Total:&quot;, total_minutes)
+print(&quot;Average:&quot;, average)
+
+if total_minutes &gt;= 150:
+    print(&quot;Strong reading habit.&quot;)
+elif total_minutes &gt;= 90:
+    print(&quot;Good start. Keep building.&quot;)
+else:
+    print(&quot;Try to read a little more next week.&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will package repeated logic into functions so your code becomes cleaner and easier to reuse.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">6</span><span>Functions, parameters, return values, and scope</span></span>
+        <span>Organization</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: grouping code into named tools, passing values in, sending values back, and understanding where variables exist.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-6"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>A function is a named block of code that performs a job. Functions are one of the most important habits in programming because they reduce repetition and improve organization. Instead of copying the same logic in several places, you define it once and call it whenever you need it.</p><p>Functions often receive information through parameters. In <code>def square(number):</code>, the parameter <code>number</code> is the placeholder name used inside the function. When the function is called with an argument such as <code>square(5)</code>, the value 5 is passed into that parameter.</p><p>The keyword <code>return</code> sends a value back to the part of the program that called the function. This is different from <code>print()</code>. Printing shows something on the screen, but returning gives the program a reusable result that can be stored, compared, or combined with other work. Many beginners improve quickly as soon as they understand that <code>print</code> and <code>return</code> do different jobs.</p><p>Scope is another missing piece that matters early. A variable created inside a function is usually local to that function, which means it exists there and not everywhere else. This is actually helpful because it keeps parts of a program from interfering with one another. Functions are easiest to use when each one has a clear purpose, clear inputs, and a clear returned result.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can define and call a function.</li><li>You can pass values into a function with parameters.</li><li>You can explain the difference between <code>print</code> and <code>return</code>.</li><li>You understand that local variables belong to the function where they are created.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Function:</strong> a named block of code that performs a task.</li><li><strong>Parameter:</strong> a placeholder name in the function definition.</li><li><strong>Argument:</strong> the actual value passed into a function call.</li><li><strong>Return value:</strong> the value sent back by <code>return</code>.</li><li><strong>Call:</strong> using a function by writing its name with parentheses.</li><li><strong>Scope:</strong> the part of the program where a variable can be used.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Forgetting to call the function after defining it.</li><li>Using <code>print()</code> when the program really needs <code>return</code>.</li><li>Passing the wrong number of arguments.</li><li>Trying to use a local variable outside the function where it was created.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>def rectangle_area(width, height):
+    area = width * height
+    return area
+
+def letter_grade(score):
+    if score &gt;= 90:
+        return &quot;A&quot;
+    elif score &gt;= 80:
+        return &quot;B&quot;
+    elif score &gt;= 70:
+        return &quot;C&quot;
+    else:
+        return &quot;Needs review&quot;
+
+room_area = rectangle_area(5, 3)
+print(room_area)
+print(letter_grade(87))</code></pre>
+            <p>The first function returns a number. The second returns a message. Both are reusable because the specific values are passed in when the functions are called.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>What is the main difference between <code>print(value)</code> and <code>return value</code> inside a function?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden><code>print()</code> displays a value for the user. <code>return</code> sends a value back to the caller so the rest of the program can keep using it.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>What does it mean for a variable to be local to a function?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It means the variable exists inside that function and is normally not available outside it.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a report card helper.</strong></p>
+            <ol>
+              <li>Write a function <code>average_of_three(a, b, c)</code> that returns the average of three scores.</li><li>Write a function <code>letter_grade(score)</code> that returns a grade or message.</li><li>Ask the user for a student name and three scores.</li><li>Call the functions to compute the average and the grade.</li><li>Print a final summary using the returned values.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Return the average from the first function, store it in a variable, then pass that variable into the grade function.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>def average_of_three(a, b, c):
+    return (a + b + c) / 3
+
+def letter_grade(score):
+    if score &gt;= 90:
+        return &quot;A&quot;
+    elif score &gt;= 80:
+        return &quot;B&quot;
+    elif score &gt;= 70:
+        return &quot;C&quot;
+    else:
+        return &quot;Needs review&quot;
+
+name = input(&quot;Student name: &quot;)
+score1 = int(input(&quot;Score 1: &quot;))
+score2 = int(input(&quot;Score 2: &quot;))
+score3 = int(input(&quot;Score 3: &quot;))
+
+average = average_of_three(score1, score2, score3)
+grade = letter_grade(average)
+
+print(f&quot;{name} has an average of {average:.1f} and a grade of {grade}.&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will work with strings, which are sequences of characters that programs use constantly.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">7</span><span>Strings and text processing</span></span>
+        <span>Text</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: treating text as data you can inspect, clean, slice, and analyze.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-7"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>A string is a sequence of characters. The word sequence matters because it means the characters have an order. Once something has order, you can talk about the first character, the last character, the length, and what happens if you take just part of the string.</p><p>Indexing is the idea of accessing one character by position. In Python, indexing starts at 0, not 1. That means if <code>word = "python"</code>, then <code>word[0]</code> is <code>p</code>. This feels strange at first, but it is one of the most important habits to learn early because the same idea appears again with lists and other sequences.</p><p>Strings also come with many useful methods. <code>.strip()</code> removes extra spaces at the start or end. <code>.lower()</code> and <code>.upper()</code> change capitalization. <code>.replace()</code> swaps one piece of text for another. <code>.split()</code> breaks a string into a list of smaller pieces. These tools make programs more reliable because user input is often messy and inconsistent.</p><p>One subtle idea is that strings are immutable, which means methods usually produce new strings rather than changing the old one in place. That is why reassignment is common in string work. If you want a cleaned version of the text, store the cleaned result. This lesson matters because almost every real program works with text somewhere.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can use <code>len()</code> on a string.</li><li>You can explain how indexing works.</li><li>You can use at least three helpful string methods.</li><li>You can clean or analyze user text with a loop or a method.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>String:</strong> a sequence of text characters.</li><li><strong>Index:</strong> the position of one item in a sequence.</li><li><strong>Slicing:</strong> taking a part of a sequence.</li><li><strong>Method:</strong> a built-in action attached to an object such as a string.</li><li><strong>Immutable:</strong> not changed in place; instead, a new value is produced.</li><li><strong><code>len()</code>:</strong> returns the length of a sequence.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Starting indexes at 1 instead of 0.</li><li>Using an index that is outside the string's length.</li><li>Assuming <code>.lower()</code> changes the original string automatically without reassignment.</li><li>Forgetting to clean input before comparing it.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>title = input(&quot;Enter a book title: &quot;).strip()
+
+print(&quot;Original:&quot;, title)
+print(&quot;Lowercase:&quot;, title.lower())
+print(&quot;First letter:&quot;, title[0])
+print(&quot;First three characters:&quot;, title[:3])
+
+words = title.split()
+print(&quot;Number of words:&quot;, len(words))</code></pre>
+            <p>This example cleans the input, uses indexing and slicing, and breaks the title into words with <code>split()</code>.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>If <code>word = "python"</code>, what does <code>word[0]</code> give you?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It gives <strong>p</strong>, the first character. Indexing starts at 0 in Python.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>What does <code>.strip()</code> remove?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It removes whitespace from the start and end of a string, such as extra spaces or line breaks.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a subject name analyzer.</strong></p>
+            <ol>
+              <li>Ask the user for a subject name.</li><li>Clean the input with <code>.strip()</code>.</li><li>Print the subject in uppercase and lowercase.</li><li>Print the first character and the total number of characters.</li><li>Stretch challenge: loop through the string and count the vowels.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>If you want to count vowels, start with a variable such as <code>vowel_count = 0</code> and add 1 whenever you see a vowel.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>subject = input(&quot;Enter a subject name: &quot;).strip()
+print(&quot;Uppercase:&quot;, subject.upper())
+print(&quot;Lowercase:&quot;, subject.lower())
+print(&quot;First character:&quot;, subject[0])
+print(&quot;Length:&quot;, len(subject))
+
+vowel_count = 0
+for letter in subject.lower():
+    if letter in &quot;aeiou&quot;:
+        vowel_count = vowel_count + 1
+
+print(&quot;Vowel count:&quot;, vowel_count)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will move from one piece of text to a whole collection of values by learning lists.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">8</span><span>Lists and basic list algorithms</span></span>
+        <span>Collections</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: storing many related values in one place and processing them with loops.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-8"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>A list is an ordered collection of values. Instead of creating separate variables such as <code>score1</code>, <code>score2</code>, and <code>score3</code>, you can store many scores inside one list. This makes your code shorter, clearer, and easier to scale.</p><p>Lists use square brackets, and like strings, they use indexing that starts at 0. A list can hold many kinds of values, including all numbers, all text values, or even a mix. Unlike strings, lists are mutable, which means you can change them by adding, removing, or replacing items.</p><p>Many beginner problems can be solved with a few list patterns: collecting items with <code>.append()</code>, looping through the list, calculating a total with an accumulator, finding a maximum or minimum, and searching for something specific. These are early examples of algorithms, which are step-by-step methods for solving problems.</p><p>Lists are important because real programs often need to handle groups of related data: quiz scores, homework tasks, names, temperatures, or menu choices. Once a student understands lists, programs become much more flexible and much less repetitive.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can create a list and add items with <code>.append()</code>.</li><li>You can loop through a list and process each item.</li><li>You can calculate a total or average from list values.</li><li>You can explain why a list is better than many separate variables for repeated data.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>List:</strong> an ordered collection of values.</li><li><strong>Mutable:</strong> able to change after creation.</li><li><strong><code>.append()</code>:</strong> adds one item to the end of a list.</li><li><strong>Traversal:</strong> moving through each item in a list, often with a loop.</li><li><strong>Algorithm:</strong> a step-by-step method for solving a problem.</li><li><strong>Element:</strong> one item inside a list.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Using parentheses instead of square brackets when creating a list.</li><li>Trying to access an index that does not exist.</li><li>Forgetting that the first item is at index 0.</li><li>Using a list before putting anything into it.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>scores = []
+
+for number in range(3):
+    score = int(input(&quot;Enter a score: &quot;))
+    scores.append(score)
+
+total = 0
+for score in scores:
+    total = total + score
+
+average = total / len(scores)
+print(&quot;Scores:&quot;, scores)
+print(&quot;Average:&quot;, average)
+print(&quot;Highest:&quot;, max(scores))
+print(&quot;Lowest:&quot;, min(scores))</code></pre>
+            <p>The loop collects values into a list. A second loop totals them so the program can calculate the average.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>What does <code>scores.append(90)</code> do?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It adds the value 90 to the end of the list called <code>scores</code>.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>Why is a list usually better than variables named <code>score1</code>, <code>score2</code>, and <code>score3</code>?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because a list lets you handle any number of scores with loops and list operations instead of rewriting code for each separate variable.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a quiz score tracker.</strong></p>
+            <ol>
+              <li>Ask how many quiz scores the user wants to enter.</li><li>Use a loop and <code>.append()</code> to collect the scores in a list.</li><li>Calculate the total, average, highest score, and lowest score.</li><li>Print the list of scores and the summary results.</li><li>Stretch challenge: count how many scores are passing.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>If you count passing scores, start with <code>passing_count = 0</code> and increase it each time a score meets your passing rule.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>count = int(input(&quot;How many quiz scores? &quot;))
+scores = []
+
+for number in range(1, count + 1):
+    score = int(input(f&quot;Enter score {number}: &quot;))
+    scores.append(score)
+
+total = 0
+passing_count = 0
+
+for score in scores:
+    total = total + score
+    if score &gt;= 70:
+        passing_count = passing_count + 1
+
+average = total / len(scores)
+print(&quot;Scores:&quot;, scores)
+print(&quot;Average:&quot;, average)
+print(&quot;Highest:&quot;, max(scores))
+print(&quot;Lowest:&quot;, min(scores))
+print(&quot;Passing scores:&quot;, passing_count)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will organize labeled information with dictionaries.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">9</span><span>Dictionaries and structured records</span></span>
+        <span>Key-value data</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: storing information as labeled key-value pairs so the meaning of each value is clear.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-9"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>A dictionary stores data as key-value pairs. The key is the label, and the value is the information connected to that label. This is useful whenever the meaning of the data matters more than its position. A student profile with <code>name</code>, <code>grade_level</code>, and <code>average_score</code> is much easier to understand in a dictionary than in a plain list.</p><p>You access a dictionary value using its key, such as <code>student["name"]</code>. You can also update values by assigning a new value to an existing key. This makes dictionaries flexible when information changes over time.</p><p>A helpful question for beginners is this: when should I use a list, and when should I use a dictionary? Use a list when you mainly care about order and have many similar items. Use a dictionary when you want labels that explain what each piece of data means. Many real programs use both together: one dictionary for one record, and a list to hold many of those records.</p><p>Dictionaries are important because they move programming beyond simple calculations and toward data modeling. They help students see that good code is not only about syntax. It is also about choosing a structure that fits the problem.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can create a dictionary with clear keys.</li><li>You can access and update values using keys.</li><li>You can loop through a dictionary with <code>.items()</code>.</li><li>You can explain when a dictionary is more helpful than a list.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Dictionary:</strong> a collection of key-value pairs.</li><li><strong>Key:</strong> the label used to access a value.</li><li><strong>Value:</strong> the data stored under a key.</li><li><strong>Record:</strong> a group of related fields about one thing, such as one student.</li><li><strong><code>.items()</code>:</strong> lets you loop through key-value pairs.</li><li><strong>Nested data:</strong> data structures stored inside one another, such as a list of dictionaries.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Using the wrong key name or misspelling a key.</li><li>Forgetting quotation marks around string keys.</li><li>Using a dictionary when a simple list would be clearer, or vice versa.</li><li>Changing a value without checking whether the key already exists.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>student = {
+    &quot;name&quot;: &quot;Ava&quot;,
+    &quot;grade_level&quot;: 10,
+    &quot;favorite_subject&quot;: &quot;Biology&quot;
+}
+
+print(student[&quot;name&quot;])
+student[&quot;favorite_subject&quot;] = &quot;Chemistry&quot;
+print(student)
+
+subjects = [
+    {&quot;name&quot;: &quot;Math&quot;, &quot;score&quot;: 82},
+    {&quot;name&quot;: &quot;Science&quot;, &quot;score&quot;: 91}
+]
+
+for subject in subjects:
+    print(subject[&quot;name&quot;], subject[&quot;score&quot;])</code></pre>
+            <p>The first dictionary stores labeled details about one student. The list called <code>subjects</code> stores multiple dictionaries, which is a very common project pattern.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>Why is a dictionary usually better than a list for a student profile?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because the keys act like labels. <code>student["name"]</code> is much clearer than remembering that position 0 or 1 means something specific.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>What does a loop like <code>for key, value in student.items():</code> let you do?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It lets you go through every key-value pair in the dictionary so you can display or process each field.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a student profile dashboard.</strong></p>
+            <ol>
+              <li>Ask for a student name, grade level, favorite subject, average score, and hours studied this week.</li><li>Store the answers in a dictionary with clear keys.</li><li>Loop through the dictionary and print a labeled summary.</li><li>Use a conditional to give advice based on score or study hours.</li><li>Stretch challenge: write a function called <code>show_profile(profile)</code> that prints the report.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Use readable keys such as <code>"name"</code>, <code>"average_score"</code>, and <code>"hours_studied"</code>. Convert numbers before storing them.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>student = {
+    &quot;name&quot;: input(&quot;Student name: &quot;).strip(),
+    &quot;grade_level&quot;: int(input(&quot;Grade level: &quot;)),
+    &quot;favorite_subject&quot;: input(&quot;Favorite subject: &quot;).strip(),
+    &quot;average_score&quot;: float(input(&quot;Average score: &quot;)),
+    &quot;hours_studied&quot;: float(input(&quot;Hours studied this week: &quot;))
+}
+
+for key, value in student.items():
+    print(key, &quot;:&quot;, value)
+
+if student[&quot;average_score&quot;] &gt;= 90 and student[&quot;hours_studied&quot;] &gt;= 5:
+    print(&quot;Excellent work. Keep using the same habits.&quot;)
+elif student[&quot;average_score&quot;] &gt;= 75:
+    print(&quot;Solid progress. Focus on one weaker topic this week.&quot;)
+else:
+    print(&quot;Build a stronger routine with more review and practice.&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will make programs safer by validating user input and handling errors gracefully.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">10</span><span>Input validation and error handling with try/except</span></span>
+        <span>Robust programs</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: checking whether input is valid and keeping the program running when a user types something unexpected.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-10"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>Real users do not always type exactly what the programmer expects. A student may type letters when the program expects a number, or enter a number outside the allowed range. If your code is not prepared for that, it may crash. Validation is the process of checking whether input is acceptable before the program continues.</p><p>One kind of validation is rule checking. For example, if the program expects a test score from 0 to 100, it should reject 145 or -2 even though both are numbers. Another kind is type checking. If the program expects a number and the user types <code>hello</code>, the conversion with <code>int()</code> will fail. That is where <code>try</code> and <code>except</code> help.</p><p>Inside a <code>try</code> block, Python attempts a piece of code that might fail. If an error occurs, Python jumps to the matching <code>except</code> block instead of crashing the whole program. For beginners, one of the most practical uses is catching <code>ValueError</code> when converting input to numbers.</p><p>Validation and error handling are often paired with a <code>while</code> loop. The loop keeps asking until the user provides valid input. This is a major step toward writing programs that feel polished and trustworthy. It is also one of the most useful missing concepts in many beginner guides because it teaches students to expect imperfect input instead of assuming perfect users.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain the difference between invalid type and invalid value.</li><li>You can use <code>try</code>/<code>except ValueError</code> for safe number input.</li><li>You can use a loop to keep asking until the input is valid.</li><li>You can write polite and clear error messages for the user.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Validation:</strong> checking whether data follows the rules you need.</li><li><strong>Error handling:</strong> responding to problems in a controlled way instead of crashing.</li><li><strong><code>try</code> block:</strong> code Python attempts to run.</li><li><strong><code>except</code> block:</strong> code that runs if the matching error occurs.</li><li><strong><code>ValueError</code>:</strong> an error often raised when a conversion such as <code>int()</code> fails.</li><li><strong>Guard condition:</strong> a rule that blocks bad input before the program moves on.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Assuming users will always enter the correct type of data.</li><li>Accepting numbers that are technically numbers but still outside the allowed range.</li><li>Using error handling without giving the user a helpful message.</li><li>Forgetting to repeat the question after invalid input.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>while True:
+    try:
+        age = int(input(&quot;Enter your age: &quot;))
+        if age &lt; 0 or age &gt; 120:
+            print(&quot;Please enter a realistic age.&quot;)
+        else:
+            break
+    except ValueError:
+        print(&quot;Please type a whole number.&quot;)
+
+print(f&quot;Age accepted: {age}&quot;)</code></pre>
+            <p>The loop continues until the user provides a whole number in the allowed range. The program does not crash if the user types text.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>What is the job of <code>try</code> and <code>except</code> in a beginner program?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>They let the program respond to certain errors in a controlled way instead of crashing immediately.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>Why is a <code>while True</code> loop often used with input validation?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because it lets the program keep asking the question until the answer passes the rules and the program can <code>break</code> out of the loop.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a safe grade entry tool.</strong></p>
+            <ol>
+              <li>Ask the user for a test score.</li><li>Use <code>try</code>/<code>except</code> so the program does not crash if the user types text.</li><li>Reject scores below 0 or above 100.</li><li>Keep asking until the score is valid.</li><li>Print a final message confirming the accepted score.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>There are two checks: first, can the text become a number? Second, is the number in the allowed range?</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>while True:
+    try:
+        score = float(input(&quot;Enter a score from 0 to 100: &quot;))
+        if 0 &lt;= score &lt;= 100:
+            break
+        else:
+            print(&quot;The score must be between 0 and 100.&quot;)
+    except ValueError:
+        print(&quot;Please enter a valid number.&quot;)
+
+print(f&quot;Accepted score: {score}&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will learn how to debug programs systematically instead of guessing.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">11</span><span>Debugging, testing, and tracing</span></span>
+        <span>Problem solving</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: reading error messages, tracing values, and designing small tests that reveal mistakes.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-11"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>Debugging is the process of finding, understanding, and fixing mistakes in a program. Every programmer debugs. That includes students, teachers, and professionals. Debugging is not a sign of failure. It is part of normal programming work.</p><p>There are several common categories of bugs. A syntax error means Python cannot read the code at all. A runtime error means Python starts the program but crashes while running it. A logic error is different: the program runs, but the answer is wrong. Each type needs a slightly different response.</p><p>One of the most powerful beginner techniques is tracing. Read the code line by line and track what each variable stores after each step. This can be done mentally, on paper, or with temporary print statements. A trace table is especially useful inside loops because values change over time and it is easy to lose track of them.</p><p>Testing is the partner of debugging. Instead of running a program once and hoping for the best, strong programmers try several cases on purpose: a typical case, a small edge case, a case near a boundary, and an invalid case. When students learn to predict outcomes before running code, they stop treating the computer like magic and start treating it like a system they can reason about.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain the difference among syntax, runtime, and logic errors.</li><li>You can use print statements or a trace table to inspect values.</li><li>You can read a traceback and look at the relevant line.</li><li>You can design a few different test cases for a small program.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Debugging:</strong> finding and fixing mistakes in code.</li><li><strong>Syntax error:</strong> code Python cannot read correctly.</li><li><strong>Runtime error:</strong> an error that occurs while the program is running.</li><li><strong>Logic error:</strong> a mistake in reasoning that produces the wrong answer.</li><li><strong>Traceback:</strong> Python's report of where an error happened.</li><li><strong>Test case:</strong> a chosen input used to check whether a program behaves correctly.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Changing many things at once and losing track of what helped.</li><li>Ignoring the line number in an error message.</li><li>Testing only one easy input.</li><li>Assuming a program is correct just because it ran once.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>scores = [80, 90, 100]
+total = 0
+
+for score in scores:
+    total = total + score
+    print(&quot;Current score:&quot;, score, &quot;Running total:&quot;, total)
+
+average = total / len(scores)
+print(&quot;Average:&quot;, average)</code></pre>
+            <p>The extra print statement is a debugging move. It reveals how the running total changes during each loop iteration.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>What is the main goal of debugging?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>To find the source of a problem, understand why it happens, and change the code so the program behaves correctly.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>Name three useful kinds of test cases for a beginner program.</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>A typical case, a boundary or edge case, and an invalid case are all useful because they reveal different kinds of mistakes.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a debug diary.</strong></p>
+            <ol>
+              <li>Choose one earlier program you wrote.</li><li>Add at least three temporary print statements to inspect values.</li><li>Write down what each print statement taught you.</li><li>Test the program with at least three different inputs.</li><li>Summarize one bug you found and how you fixed it.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Ask yourself: what value is stored here, what branch should run, and how many times should this loop repeat?</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code># Example of a helpful test checklist:
+# 1. Normal input
+# 2. Very small input
+# 3. Invalid input
+
+number = input(&quot;Enter a whole number: &quot;)
+print(&quot;Raw input:&quot;, number)
+
+try:
+    value = int(number)
+    print(&quot;Converted value:&quot;, value)
+    print(&quot;Double:&quot;, value * 2)
+except ValueError:
+    print(&quot;That was not a whole number.&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will import modules so your programs can use tools Python already provides.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">12</span><span>Modules, imports, and helpful library tools</span></span>
+        <span>Libraries</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: reusing code from Python's standard library instead of writing every tool from scratch.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-12"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>A module is a file containing useful Python code that someone has already written. When you use <code>import</code>, you tell Python that your program wants access to those tools. This is a major shift in mindset for beginners because it shows that programming is not only about inventing everything yourself.</p><p>Modules matter because they let programs become powerful much faster. Instead of writing your own random-number system or advanced math functions, you can import existing tools and focus on solving your actual problem. Experienced programmers are often faster not because they type faster, but because they know what can already be reused.</p><p>The <code>random</code> module is a strong beginner example. It can choose a random integer with <code>random.randint()</code> or select a random list item with <code>random.choice()</code>. The <code>math</code> module is another helpful example, with functions such as <code>math.sqrt()</code> for square roots.</p><p>Imports also teach namespacing. In <code>random.choice(tasks)</code>, the part before the dot tells you which module the function came from. This helps keep code organized and readable. One practical warning for students: do not name your own file <code>random.py</code> if you want to import the real <code>random</code> module.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain what an import does.</li><li>You can use at least one function from <code>random</code>.</li><li>You can read code that begins with an import line.</li><li>You understand why modules save time and reduce repeated work.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Module:</strong> a file containing reusable Python code.</li><li><strong>Import:</strong> bringing a module into your program.</li><li><strong>Library:</strong> a collection of modules and tools.</li><li><strong>Namespace:</strong> a way of organizing names so Python knows where to look.</li><li><strong><code>random.choice()</code>:</strong> picks one item from a sequence.</li><li><strong><code>random.randint(a, b)</code>:</strong> picks a random integer from a to b inclusive.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Forgetting to write the <code>import</code> line.</li><li>Using the function name without the module name when the chosen import style requires it.</li><li>Naming your own file the same as a standard library module.</li><li>Choosing <code>randint()</code> when <code>choice()</code> fits the problem better.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>import random
+import math
+
+number = random.randint(1, 10)
+tasks = [&quot;Math review&quot;, &quot;Science flashcards&quot;, &quot;History notes&quot;]
+
+print(&quot;Random number:&quot;, number)
+print(&quot;Today&#x27;s task:&quot;, random.choice(tasks))
+print(&quot;Square root of 81:&quot;, math.sqrt(81))</code></pre>
+            <p>The program uses two imported modules. One provides randomness and the other provides a math function.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>Why is importing a module useful?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>It lets your program reuse tools that already exist instead of rewriting the same functionality from scratch.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>Which function is better for choosing one item from a list: <code>random.randint()</code> or <code>random.choice()</code>?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden><code>random.choice()</code> is better because it directly selects one item from a list.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a random study prompt generator.</strong></p>
+            <ol>
+              <li>Create a list of subjects or study tasks.</li><li>Import <code>random</code>.</li><li>Pick one random task from the list.</li><li>Ask the user how many minutes they have to study.</li><li>Use a conditional to print a recommendation based on the random task and available time.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Choose tools that match the problem directly. If you need one item from a list, <code>choice()</code> is simpler than inventing an index yourself.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>import random
+
+tasks = [&quot;Math review&quot;, &quot;Science flashcards&quot;, &quot;History notes&quot;, &quot;Vocabulary practice&quot;]
+task = random.choice(tasks)
+minutes = int(input(&quot;How many minutes do you have? &quot;))
+
+print(&quot;Today&#x27;s focus:&quot;, task)
+if minutes &gt;= 30:
+    print(&quot;Do a full practice session.&quot;)
+else:
+    print(&quot;Do a short focused review.&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will save and read data using files so information can survive after the program closes.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">13</span><span>Files and persistent data</span></span>
+        <span>Persistence</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: saving information to text files and reading it back later.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-13"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>Variables only exist while a program is running. Once the program closes, those values disappear. Files solve that problem by storing data outside the program so it can still exist later. This idea is called persistence, and it is what allows programs to remember notes, goals, settings, and progress.</p><p>The <code>with open(...)</code> pattern is important because it handles files cleanly and safely. The mode tells Python what you want to do. <code>"r"</code> means read. <code>"w"</code> means write and replace old contents. <code>"a"</code> means append, which adds new content to the end without erasing what was already there.</p><p>When you read from a file, you get text. When you write to a file, you usually write text as well. If you want each item on a new line, include <code>"\n"</code> at the end of what you write. When reading line by line, <code>.strip()</code> is useful for removing the newline character.</p><p>Files matter because many meaningful beginner projects become more realistic with them: journals, study goal logs, simple databases of names and scores, saved game progress, and note-taking tools. File work also teaches students to think about the difference between temporary memory and saved memory.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain why variables disappear when the program closes.</li><li>You can write text to a file and read it back.</li><li>You understand the difference among read, write, and append modes.</li><li>You can think of a project that becomes more useful when data is saved.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>File:</strong> saved data stored outside the running program.</li><li><strong>Persistence:</strong> keeping data after the program ends.</li><li><strong>Read mode (<code>"r"</code>):</strong> opening a file to view its contents.</li><li><strong>Write mode (<code>"w"</code>):</strong> opening a file to replace or create contents.</li><li><strong>Append mode (<code>"a"</code>):</strong> opening a file to add new content to the end.</li><li><strong>Newline (<code>\n</code>):</strong> the character that starts a new line in text.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Opening a file in <code>"w"</code> when you wanted to keep the old contents.</li><li>Forgetting to add a newline when saving multiple items.</li><li>Using the wrong filename or location.</li><li>Assuming that data in a variable will still exist tomorrow without saving it.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>goals = [&quot;Review algebra&quot;, &quot;Read chapter 3&quot;, &quot;Finish vocabulary practice&quot;]
+
+with open(&quot;study_goals.txt&quot;, &quot;w&quot;) as file:
+    for goal in goals:
+        file.write(goal + &quot;\n&quot;)
+
+with open(&quot;study_goals.txt&quot;, &quot;r&quot;) as file:
+    for line in file:
+        print(line.strip())</code></pre>
+            <p>The program saves several goals, one per line, and then reads them back. <code>.strip()</code> removes the newline when printing.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>Why would a program use a file instead of only variables?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because a file can store data after the program closes, while variables exist only while the program is running.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>What is the difference between file modes <code>"w"</code> and <code>"a"</code>?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden><code>"w"</code> writes fresh content and can replace old contents. <code>"a"</code> adds new content to the end without erasing what was already there.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a study note saver.</strong></p>
+            <ol>
+              <li>Ask the user for one or more study goals.</li><li>Save each goal to a text file.</li><li>Read the file back and print the saved goals.</li><li>Use append mode if you want to keep adding new goals over time.</li><li>Stretch challenge: number the goals when printing them.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>If you store multiple goals, add <code>"\n"</code> after each one so each goal appears on its own line.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>goal = input(&quot;What is your study goal for tonight? &quot;)
+
+with open(&quot;study_goal.txt&quot;, &quot;w&quot;) as file:
+    file.write(goal + &quot;\n&quot;)
+
+with open(&quot;study_goal.txt&quot;, &quot;r&quot;) as file:
+    saved_goal = file.read()
+
+print(&quot;Saved goal:&quot;)
+print(saved_goal)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: before building a larger project, you will practice breaking big problems into smaller parts.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">14</span><span>Problem decomposition, pseudocode, and planning</span></span>
+        <span>Design</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: turning a big task into smaller steps before writing the final code.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-14"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>Problem decomposition means breaking a large task into smaller pieces that are easier to understand and easier to solve. This is one of the biggest differences between a student who feels overwhelmed and a student who feels in control. The whole project may feel large, but each small piece can still be manageable.</p><p>A practical beginner pattern is input, processing, and output. Input is the information the program collects. Processing is the work it does with that information: calculations, comparisons, loops, decisions, or organization. Output is what the program shows or saves. Many messy ideas become much clearer as soon as a student sorts them into those three categories.</p><p>Pseudocode is a human-readable plan for the program's logic. It is not strict Python syntax. Its job is to help you think clearly about the order of operations before punctuation gets in the way. Good pseudocode is specific enough to guide coding, but simple enough that you can revise it quickly.</p><p>Planning also forces design choices. What data belongs in a list? What labeled fields belong in a dictionary? Which repeated jobs should become functions? Strong programmers rarely solve a large problem in one giant leap. They plan, build one piece, test it, and then connect it to the next piece.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can separate a task into input, processing, and output.</li><li>You can write short pseudocode for a program idea.</li><li>You can decide when a list or dictionary would help.</li><li>You understand why building and testing in pieces is effective.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Problem decomposition:</strong> breaking a large task into smaller parts.</li><li><strong>Pseudocode:</strong> a plain-language plan for program logic.</li><li><strong>Input:</strong> information the program receives.</li><li><strong>Processing:</strong> the work the program performs on data.</li><li><strong>Output:</strong> what the program displays or saves.</li><li><strong>Stepwise refinement:</strong> improving a solution piece by piece.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Trying to write the whole final program at once.</li><li>Skipping planning and then getting lost halfway through.</li><li>Writing pseudocode that is too vague to guide real coding.</li><li>Not deciding early which data structures will be used.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>1. Ask for the student&#x27;s name.
+2. Ask how many subjects to track.
+3. Repeat for each subject:
+   - Ask for the subject name.
+   - Ask for the current score.
+   - Ask for target study minutes.
+   - Store the data.
+4. Compute the overall average.
+5. Print a study plan.</code></pre>
+            <p>This is not executable Python. It is a map for the real code you will write.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>What is the purpose of pseudocode?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>To plan the logic of a program in simple language before worrying about exact Python syntax.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>If a program must track many labeled pieces of information for each subject, what data structures are likely helpful?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Usually both: a dictionary for one subject's labeled data and a list to store many subject dictionaries.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a pseudocode plan for a homework or study tracker.</strong></p>
+            <ol>
+              <li>Choose a small project idea.</li><li>List the inputs the program needs.</li><li>List the calculations or decisions it must make.</li><li>List the outputs it should show or save.</li><li>Write the full plan in numbered pseudocode steps.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>If your plan feels messy, sort each line into one of three groups: input, processing, or output.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>1. Ask for the student&#x27;s name.
+2. Ask how many assignments to enter.
+3. Create an empty list called assignments.
+4. Repeat for each assignment:
+   - Ask for the assignment name.
+   - Ask for the due day.
+   - Ask whether it is complete.
+   - Store the answers in a dictionary.
+   - Add the dictionary to the list.
+5. Count how many assignments are complete.
+6. Print a summary report.</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">Next step: you will combine the guide's ideas into a real capstone program.</p>
+      </div>
+    </details>
+    
+    <details class="lesson" >
+      <summary>
+        <span class="lesson-title"><span class="step-number">15</span><span>Capstone project: personal study planner</span></span>
+        <span>Integration</span>
+      </summary>
+      <div class="lesson-body">
+        <div class="lesson-head">
+          <p class="tag">New concept: combining the major beginner ideas into one complete, meaningful program.</p>
+          <label class="complete-toggle"><input class="step-check" type="checkbox" data-step="step-15"> Mark step complete</label>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Detailed explanation</h3>
+            <p>A capstone project is not mainly about learning one more command. It is about integration. The student has already seen the major building blocks of beginner Python. The capstone is where those blocks are combined into a program that feels useful, connected, and intentional.</p><p>A strong capstone should collect input, store data in useful structures, repeat through multiple items with loops, make decisions with conditionals, place repeated logic inside functions, and handle basic invalid input gracefully. If possible, it can also save results to a file. When all of those ideas work together, the student is no longer only practicing isolated syntax. They are building software behavior.</p><p>The best way to approach a capstone is in layers. First make sure the input stage works. Then print the stored data to confirm it looks correct. Then add calculations. Then add labels or recommendations. Then improve the final report. Finally, clean the code by moving repeated work into functions. This layered approach reduces frustration because each new piece can be tested on its own.</p><p>The most important outcome of a capstone is confidence. If a student can explain what each part of the program does, test it with several cases, and fix mistakes without giving up, then the guide has done its job.</p>
+          </div>
+          <div class="card">
+            <h3>Ready to move on when...</h3>
+            <ul><li>You can explain the structure of your program before running it.</li><li>You can test several cases and adjust the logic when needed.</li><li>You can connect functions, lists, and dictionaries without getting lost.</li><li>You can improve one part of the project without breaking the rest.</li></ul>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h3>Core vocabulary</h3>
+            <ul><li><strong>Capstone:</strong> a final project that combines multiple concepts.</li><li><strong>Integration:</strong> making different ideas work together in one program.</li><li><strong>Milestone:</strong> one small stage in building a larger project.</li><li><strong>Refactor:</strong> improve the code's structure without changing what it does.</li><li><strong>Feature:</strong> one capability or behavior of a program.</li><li><strong>Report:</strong> the final output summary shown to the user.</li></ul>
+          </div>
+          <div class="card">
+            <h3>Common mistakes to watch for</h3>
+            <ul><li>Trying to write the final version all at once.</li><li>Skipping tests until the very end.</li><li>Keeping everything in one giant block instead of using functions.</li><li>Adding extra features before the basic version works.</li></ul>
+          </div>
+        </div>
+
+        <details class="mini">
+          <summary>Worked example</summary>
+          <div class="mini-body">
+            <pre><code>def average_score(subjects):
+    total = 0
+    for subject in subjects:
+        total = total + subject[&quot;score&quot;]
+    return total / len(subjects)</code></pre>
+            <p>This helper function is one small part of a larger program. Capstones are easier when the code is broken into clear pieces like this.</p>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Quick check</summary>
+          <div class="mini-body">
+            <p>Why is it smart to build a capstone in layers instead of writing the whole thing at once?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>Because smaller layers are easier to test and debug. When something breaks, it is easier to identify which new part caused the problem.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Challenge check</summary>
+          <div class="mini-body">
+            <p>Which concepts should definitely appear in this capstone if it is meant to review the guide well?</p>
+            <button class="button answer-button" type="button">Show answer</button>
+            <div class="answer" hidden>At minimum: input, variables, conditionals, loops, functions, strings, lists, and dictionaries. Validation and file saving are strong extensions.</div>
+          </div>
+        </details>
+
+        <details class="mini">
+          <summary>Guided assignment</summary>
+          <div class="mini-body">
+            <p><strong>Build: a personal study planner.</strong></p>
+            <ol>
+              <li>Ask for the student's name and how many subjects they want to plan for.</li><li>Use a loop to collect each subject name, current score, and goal study minutes.</li><li>Store each subject as a dictionary inside a list.</li><li>Write a function to calculate the overall average score.</li><li>Write a function that labels each subject as strong, steady practice, or urgent review.</li><li>Print a final report with subject-by-subject advice.</li><li>Stretch challenge: ask whether the student wants to save the plan to a file.</li>
+            </ol>
+            <details class="mini">
+              <summary>Hint</summary>
+              <div class="mini-body"><p>Build the program in this order: collect input, print the raw data, add the average function, add the label function, print the report, and only then add saving.</p></div>
+            </details>
+            <details class="mini">
+              <summary>Sample solution</summary>
+              <div class="mini-body"><pre><code>def get_positive_int(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+            if value &gt; 0:
+                return value
+            else:
+                print(&quot;Please enter a number greater than 0.&quot;)
+        except ValueError:
+            print(&quot;Please enter a whole number.&quot;)
+
+def label_subject(score):
+    if score &lt; 70:
+        return &quot;Urgent review&quot;
+    elif score &lt; 85:
+        return &quot;Steady practice&quot;
+    else:
+        return &quot;Strong&quot;
+
+def average_score(subjects):
+    total = 0
+    for subject in subjects:
+        total = total + subject[&quot;score&quot;]
+    return total / len(subjects)
+
+def save_plan(name, subjects, overall_average):
+    with open(&quot;study_plan.txt&quot;, &quot;w&quot;) as file:
+        file.write(f&quot;Study plan for {name}\n&quot;)
+        file.write(f&quot;Overall average: {overall_average:.1f}\n&quot;)
+        for subject in subjects:
+            label = label_subject(subject[&quot;score&quot;])
+            file.write(
+                f&quot;{subject[&#x27;name&#x27;]}: {label} - &quot;
+                f&quot;{subject[&#x27;goal_minutes&#x27;]} minutes\n&quot;
+            )
+
+name = input(&quot;Student name: &quot;).strip()
+subject_count = get_positive_int(&quot;How many subjects do you want to plan for? &quot;)
+subjects = []
+
+for number in range(1, subject_count + 1):
+    subject_name = input(f&quot;Subject {number} name: &quot;).strip()
+
+    while True:
+        try:
+            score = float(input(f&quot;Current score in {subject_name}: &quot;))
+            if 0 &lt;= score &lt;= 100:
+                break
+            else:
+                print(&quot;Score must be between 0 and 100.&quot;)
+        except ValueError:
+            print(&quot;Please enter a valid number.&quot;)
+
+    goal_minutes = get_positive_int(f&quot;Goal study minutes for {subject_name}: &quot;)
+
+    subjects.append({
+        &quot;name&quot;: subject_name,
+        &quot;score&quot;: score,
+        &quot;goal_minutes&quot;: goal_minutes
+    })
+
+overall_average = average_score(subjects)
+
+print(f&quot;\nStudy plan for {name}&quot;)
+print(f&quot;Overall average: {overall_average:.1f}&quot;)
+
+for subject in subjects:
+    label = label_subject(subject[&quot;score&quot;])
+    print(f&quot;{subject[&#x27;name&#x27;]}: {label} - {subject[&#x27;goal_minutes&#x27;]} minutes&quot;)
+
+save_choice = input(&quot;Save this plan to a file? (yes/no): &quot;).strip().lower()
+if save_choice == &quot;yes&quot;:
+    save_plan(name, subjects, overall_average)
+    print(&quot;Plan saved to study_plan.txt&quot;)</code></pre></div>
+            </details>
+          </div>
+        </details>
+
+        <p class="bridge">After this capstone, the student is ready to move into exception handling in more depth, larger libraries, object-oriented programming, and multi-file projects.</p>
+      </div>
+    </details>
+    
+
+    <section class="panel" style="padding:20px;">
+      <h2>Python quick reference</h2>
+      <p class="subtle">Use this section for fast review between lessons. It is not a replacement for understanding, but it is helpful when a student forgets the shape of a command.</p>
+      <div class="ref-grid">
+        <article class="ref-card"><strong>Output and comments</strong><pre><code>print(&quot;Hello&quot;)
+# This is a comment</code></pre><p>Use <code>print()</code> for visible output. Use comments to explain purpose for human readers.</p></article><article class="ref-card"><strong>Variables and arithmetic</strong><pre><code>score = 92
+score = score + 5
+print(score)</code></pre><p>Store values in variables. Update them as the program runs.</p></article><article class="ref-card"><strong>Input and conversion</strong><pre><code>age = int(input(&quot;Age: &quot;))
+height = float(input(&quot;Height: &quot;))</code></pre><p>User input arrives as text first. Convert when the program needs numbers.</p></article><article class="ref-card"><strong>Conditionals</strong><pre><code>if score &gt;= 70:
+    print(&quot;Pass&quot;)
+else:
+    print(&quot;Review&quot;)</code></pre><p>Conditionals choose among different paths.</p></article><article class="ref-card"><strong>Loops</strong><pre><code>total = 0
+for n in range(3):
+    total = total + n</code></pre><p>Loops repeat code and often update a counter or accumulator.</p></article><article class="ref-card"><strong>Functions</strong><pre><code>def square(x):
+    return x * x</code></pre><p>Functions group repeated logic into reusable parts.</p></article><article class="ref-card"><strong>Lists and dictionaries</strong><pre><code>scores = [80, 90]
+student = {&quot;name&quot;: &quot;Ava&quot;, &quot;score&quot;: 90}</code></pre><p>Lists store ordered collections. Dictionaries store labeled values.</p></article><article class="ref-card"><strong>Files</strong><pre><code>with open(&quot;notes.txt&quot;, &quot;w&quot;) as file:
+    file.write(&quot;Study tonight&quot;)</code></pre><p>Files keep data after the program closes.</p></article>
+      </div>
+    </section>
+
+    <section class="panel" style="padding:20px;">
+      <h2>Common Python error messages and what they usually mean</h2>
+      <p class="subtle">Students should get used to reading error names as clues rather than as proof that they are failing.</p>
+      <div class="error-grid">
+        <article class="error-card"><strong>SyntaxError</strong><p>Python could not read the code. Check punctuation, missing quotation marks, or a missing colon.</p></article><article class="error-card"><strong>IndentationError</strong><p>The spacing at the start of the line does not match Python's required structure.</p></article><article class="error-card"><strong>NameError</strong><p>Python does not know the name you used. The variable or function may be misspelled or not defined yet.</p></article><article class="error-card"><strong>TypeError</strong><p>You used the wrong kind of value for an operation, such as adding a number to a string.</p></article><article class="error-card"><strong>ValueError</strong><p>The type of operation is okay, but the content is invalid, such as <code>int("cat")</code>.</p></article><article class="error-card"><strong>IndexError</strong><p>You tried to use a list or string position that does not exist.</p></article><article class="error-card"><strong>KeyError</strong><p>You asked a dictionary for a key that is not present.</p></article><article class="error-card"><strong>FileNotFoundError</strong><p>Python could not find the file you tried to read.</p></article>
+      </div>
+    </section>
+
+    <section class="panel" style="padding:20px;">
+      <h2>Bonus cumulative quiz bank</h2>
+      <p>Use these review prompts after every few lessons or before the capstone. They test understanding across the whole guide.</p>
+      <div class="quiz-bank-grid">
+        <details class="mini helper"><summary>Why does <code>input()</code> usually need conversion before math?</summary><div class="mini-body"><p>Because <code>input()</code> returns text first. Functions such as <code>int()</code> or <code>float()</code> convert that text into numbers.</p></div></details><details class="mini helper"><summary>What is the difference between <code>=</code> and <code>==</code>?</summary><div class="mini-body"><p><code>=</code> assigns a value to a variable. <code>==</code> compares two values to see whether they are equal.</p></div></details><details class="mini helper"><summary>When is a <code>for</code> loop usually better than a <code>while</code> loop?</summary><div class="mini-body"><p>When you already know how many times the repetition should happen.</p></div></details><details class="mini helper"><summary>What is an accumulator?</summary><div class="mini-body"><p>A variable that keeps a running total as a loop processes values.</p></div></details><details class="mini helper"><summary>Why use <code>return</code> inside a function?</summary><div class="mini-body"><p>To send a value back so the program can keep using it in later code.</p></div></details><details class="mini helper"><summary>What is the difference between a string and a list?</summary><div class="mini-body"><p>A string is a sequence of text characters. A list is a sequence of values that can be numbers, text, or other objects.</p></div></details><details class="mini helper"><summary>Why are dictionaries useful?</summary><div class="mini-body"><p>They label values with keys, which makes the meaning of each value much clearer.</p></div></details><details class="mini helper"><summary>What does <code>try</code>/<code>except</code> help with?</summary><div class="mini-body"><p>It helps a program respond to certain errors in a controlled way instead of crashing immediately.</p></div></details><details class="mini helper"><summary>What is a logic error?</summary><div class="mini-body"><p>A bug where the program runs, but the result is wrong because the reasoning or algorithm is incorrect.</p></div></details><details class="mini helper"><summary>Why use modules?</summary><div class="mini-body"><p>Modules let you reuse existing tools instead of rewriting everything from scratch.</p></div></details><details class="mini helper"><summary>What is the difference between file modes <code>"w"</code> and <code>"a"</code>?</summary><div class="mini-body"><p><code>"w"</code> writes fresh content and can replace old contents. <code>"a"</code> adds to the end of an existing file.</p></div></details><details class="mini helper"><summary>What is pseudocode?</summary><div class="mini-body"><p>A human-readable plan for a program's logic written before the final Python syntax.</p></div></details><details class="mini helper"><summary>Why should beginners test more than one input case?</summary><div class="mini-body"><p>Because one successful run does not prove the program works in other situations.</p></div></details><details class="mini helper"><summary>What is variable scope?</summary><div class="mini-body"><p>It describes where a variable can be used, such as inside one function only.</p></div></details><details class="mini helper"><summary>What makes a capstone project strong?</summary><div class="mini-body"><p>It combines several concepts in one meaningful program and has been tested with multiple cases.</p></div></details>
+      </div>
+    </section>
+
+    <section class="panel notes" style="padding:20px;">
+      <h2>Study notes</h2>
+      <p>Write the three ideas that were hardest, the three ideas that clicked, and one project you want to build next. Notes are saved in your browser.</p>
+      <textarea id="studyNotes" placeholder="Example: I understand loops better when I trace them on paper. I keep forgetting that input() returns a string. Next project: a homework planner."></textarea>
+    </section>
+
+    <section class="panel" style="padding:20px;">
+      <h2>Where to go next</h2>
+      <p>If the student can finish the capstone without copying the sample solution line by line, they are in a strong position to continue into more advanced topics such as deeper exception handling, more standard-library modules, object-oriented programming, and multi-file projects. They do not need perfection. They need enough control to read code, change code, test code, and explain code.</p>
+    </section>
+  </main>
+
+  <script>
+    const checkboxes = document.querySelectorAll('.step-check');
+    const answerButtons = document.querySelectorAll('.answer-button');
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    const resetButton = document.getElementById('resetProgress');
+    const studyNotes = document.getElementById('studyNotes');
+
+    function updateProgress() {
+      const completed = [...checkboxes].filter((checkbox) => checkbox.checked).length;
+      progressText.textContent = `${completed} of ${checkboxes.length} steps completed`;
+      progressFill.style.width = `${(completed / checkboxes.length) * 100}%`;
+    }
+
+    checkboxes.forEach((checkbox) => {
+      const key = `python-comprehensive-guide-${checkbox.dataset.step}`;
+      checkbox.checked = localStorage.getItem(key) === 'true';
+      checkbox.addEventListener('change', () => {
+        localStorage.setItem(key, checkbox.checked);
+        updateProgress();
+      });
+    });
+
+    answerButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
+        const isHidden = answer.hasAttribute('hidden');
+        if (isHidden) {
+          answer.removeAttribute('hidden');
+          button.textContent = 'Hide answer';
+        } else {
+          answer.setAttribute('hidden', 'hidden');
+          button.textContent = 'Show answer';
+        }
+      });
+    });
+
+    studyNotes.value = localStorage.getItem('python-comprehensive-guide-notes') || '';
+    studyNotes.addEventListener('input', () => {
+      localStorage.setItem('python-comprehensive-guide-notes', studyNotes.value);
+    });
+
+    resetButton.addEventListener('click', () => {
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+        localStorage.removeItem(`python-comprehensive-guide-${checkbox.dataset.step}`);
+      });
+      studyNotes.value = '';
+      localStorage.removeItem('python-comprehensive-guide-notes');
+      document.querySelectorAll('.answer').forEach((answer) => answer.setAttribute('hidden', 'hidden'));
+      document.querySelectorAll('.answer-button').forEach((button) => {
+        button.textContent = 'Show answer';
+      });
+      updateProgress();
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
